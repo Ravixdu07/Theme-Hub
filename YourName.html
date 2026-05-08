@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Katawaredoki // The Twilight</title>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Plus+Jakarta+Sans:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --sky-deep: #1e1b4b; /* Deep night blue */
+            --sky-mid: #701a75;  /* Purple */
+            --sky-light: #fb923c; /* Sunset orange */
+            --thread-red: #e11d48;
+            --text-light: #f8fafc;
+            --marker-black: #0f172a;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
+
+        body {
+            background: linear-gradient(135deg, var(--sky-deep) 0%, var(--sky-mid) 50%, var(--sky-light) 100%);
+            color: var(--text-light);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow-x: hidden;
+            height: 100vh;
+            background-attachment: fixed;
+        }
+
+        /* --- Custom Cursor & Red Thread Canvas --- */
+        #thread-canvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            pointer-events: none;
+            z-index: 100;
+        }
+        
+        #custom-cursor {
+            position: fixed;
+            width: 8px; height: 8px;
+            background: var(--text-light);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 101;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 10px rgba(255,255,255,0.8);
+        }
+
+        /* --- The Tiamat Comet --- */
+        .comet-container {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .comet-main {
+            position: absolute;
+            top: 10%; right: 20%;
+            width: 4px; height: 150px;
+            background: linear-gradient(to bottom, transparent, #67e8f9, #ffffff);
+            transform: rotate(-45deg);
+            border-radius: 50%;
+            box-shadow: 0 0 40px 10px rgba(103, 232, 249, 0.4);
+            animation: float 6s ease-in-out infinite alternate;
+        }
+
+        .comet-split {
+            position: absolute;
+            top: 15%; right: 22%;
+            width: 2px; height: 80px;
+            background: linear-gradient(to bottom, transparent, #f472b6, #ffffff);
+            transform: rotate(-50deg);
+            border-radius: 50%;
+            box-shadow: 0 0 20px 5px rgba(244, 114, 182, 0.4);
+            animation: float-split 6s ease-in-out infinite alternate;
+        }
+
+        @keyframes float { 0% { transform: rotate(-45deg) translateY(0px); } 100% { transform: rotate(-45deg) translateY(15px); } }
+        @keyframes float-split { 0% { transform: rotate(-50deg) translate(0px, 0px); } 100% { transform: rotate(-50deg) translate(-5px, 15px); } }
+
+        /* Shooting Stars */
+        .shooting-star {
+            position: absolute;
+            width: 2px; height: 50px;
+            background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.8));
+            transform: rotate(-45deg);
+            animation: shooting 3s linear infinite;
+            opacity: 0;
+        }
+
+        @keyframes shooting {
+            0% { transform: rotate(-45deg) translateY(-100px); opacity: 1; }
+            100% { transform: rotate(-45deg) translateY(1000px); opacity: 0; }
+        }
+
+        /* --- Sections --- */
+        section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 10vw;
+            position: relative;
+            z-index: 10;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 300;
+            letter-spacing: 15px;
+            text-transform: uppercase;
+            text-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            margin-bottom: 20px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            font-weight: 300;
+            letter-spacing: 4px;
+            opacity: 0.8;
+            max-width: 600px;
+            line-height: 1.6;
+        }
+
+        /* --- The Hand-Written Message --- */
+        .message-box {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 60px;
+            margin-top: 50vh; /* Pushes it down to prompt scrolling */
+        }
+
+        .handwritten {
+            font-family: 'Caveat', cursive;
+            font-size: 4rem;
+            color: var(--marker-black);
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px 40px;
+            border-radius: 10px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            transform: rotate(-3deg);
+            display: inline-block;
+        }
+
+        /* --- Wake Up Button --- */
+        .btn-wake {
+            margin-top: 60px;
+            background: transparent;
+            color: var(--text-light);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 1.2rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            padding: 15px 40px;
+            border: 1px solid rgba(255,255,255,0.5);
+            border-radius: 100px;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-wake:hover {
+            background: var(--text-light);
+            color: var(--sky-deep);
+            box-shadow: 0 0 20px rgba(255,255,255,0.5);
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Red Thread Canvas & Cursor -->
+    <canvas id="thread-canvas"></canvas>
+    <div id="custom-cursor"></div>
+
+    <!-- Background Comet Environment -->
+    <div class="comet-container" id="stars-container">
+        <div class="comet-main"></div>
+        <div class="comet-split"></div>
+    </div>
+
+    <main>
+        <section id="twilight">
+            <h1>Katawaredoki</h1>
+            <p class="subtitle">Twilight is the time when it's hard to tell who is who. When the boundary between worlds blurs.</p>
+        </section>
+
+        <section id="memory">
+            <div class="message-box">
+                <p style="margin-bottom: 20px; letter-spacing: 2px;">I'm always searching for something, a person, a place...</p>
+                <div class="handwritten">Who are you?</div>
+                <br>
+                <button class="btn-wake" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">Wake Up</button>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // --- 1. Dynamic Shooting Stars ---
+        const starsContainer = document.getElementById('stars-container');
+        function createShootingStar() {
+            const star = document.createElement('div');
+            star.classList.add('shooting-star');
+            star.style.left = Math.random() * 150 + 'vw';
+            star.style.top = '-100px';
+            star.style.animationDuration = (Math.random() * 2 + 2) + 's';
+            star.style.animationDelay = (Math.random() * 5) + 's';
+            starsContainer.appendChild(star);
+
+            setTimeout(() => { star.remove(); }, 5000);
+        }
+        setInterval(createShootingStar, 800);
+
+        // --- 2. The Red Thread of Fate (Physics Canvas) ---
+        const canvas = document.getElementById('thread-canvas');
+        const ctx = canvas.getContext('2d');
+        const cursor = document.getElementById('custom-cursor');
+
+        let width, height;
+        let mouse = { x: window.innerWidth/2, y: window.innerHeight/2 };
+        
+        // Physics variables for the trailing ribbon
+        const segments = 40; // Length of the thread
+        const history = [];
+        
+        function resize() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        // Initialize history array
+        for(let i=0; i<segments; i++) {
+            history.push({ x: mouse.x, y: mouse.y });
+        }
+
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+            
+            // Move custom cursor dot
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+
+        function animateThread() {
+            ctx.clearRect(0, 0, width, height);
+            
+            // Update the lead point to the mouse
+            let leadX = mouse.x;
+            let leadY = mouse.y;
+
+            // Physics loop to make the thread follow the leader smoothly
+            for(let i=0; i<segments; i++) {
+                let pt = history[i];
+                // Easing / Lerping to create fluid motion
+                pt.x += (leadX - pt.x) * 0.3;
+                pt.y += (leadY - pt.y) * 0.3;
+                
+                leadX = pt.x;
+                leadY = pt.y;
+            }
+
+            // Draw the Red Thread
+            ctx.beginPath();
+            ctx.moveTo(history[0].x, history[0].y);
+            
+            for(let i=1; i<segments - 1; i++) {
+                let xc = (history[i].x + history[i+1].x) / 2;
+                let yc = (history[i].y + history[i+1].y) / 2;
+                ctx.quadraticCurveTo(history[i].x, history[i].y, xc, yc);
+            }
+            
+            ctx.quadraticCurveTo(history[segments-1].x, history[segments-1].y, history[segments-1].x, history[segments-1].y);
+            
+            // Glow effect and styling
+            ctx.strokeStyle = '#e11d48'; // Crimson red
+            ctx.lineWidth = 3;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            ctx.shadowBlur = 15;
+            ctx.shadowColor = '#e11d48';
+            ctx.stroke();
+
+            // Reset shadow for next frame
+            ctx.shadowBlur = 0;
+
+            requestAnimationFrame(animateThread);
+        }
+        
+        animateThread();
+
+        // --- 3. Return to Hub logic ---
+        document.querySelector('.btn-wake').addEventListener('click', () => {
+            // Screen flash white (like waking up)
+            const flash = document.createElement('div');
+            flash.style.position = 'fixed';
+            flash.style.top = '0'; flash.style.left = '0';
+            flash.style.width = '100vw'; flash.style.height = '100vh';
+            flash.style.background = '#fff';
+            flash.style.zIndex = '9999';
+            flash.style.opacity = '0';
+            flash.style.transition = 'opacity 1s ease';
+            document.body.appendChild(flash);
+
+            setTimeout(() => { flash.style.opacity = '1'; }, 10);
+
+            setTimeout(() => {
+                window.location.href = 'index.html'; 
+            }, 1000);
+        });
+
+    </script>
+</body>
+</html>

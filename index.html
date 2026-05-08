@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Theme Hub // ravinduwara.dev</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --surface: #161b22;
+            --border: #30363d;
+            --text-main: #c9d1d9;
+            --text-muted: #8b949e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- Entrance Animations --- */
+        @keyframes fadeDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .animate-down { animation: fadeDown 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .animate-up { opacity: 0; animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+        .delay-5 { animation-delay: 0.5s; }
+        .delay-6 { animation-delay: 0.6s; }
+        .delay-7 { animation-delay: 0.7s; }
+
+        /* --- Ultra Minimal Navigation --- */
+        nav {
+            position: fixed;
+            top: 0; width: 100%;
+            padding: 30px 5vw;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .logo { 
+            font-size: 1.2rem; 
+            font-weight: 800; 
+            letter-spacing: 2px; 
+            color: var(--text-main); 
+            text-decoration: none; 
+        }
+
+        /* --- Hero Section --- */
+        main {
+            flex: 1; display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            padding: 120px 5vw 60px; text-align: center;
+            position: relative; z-index: 2;
+        }
+
+        h1 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 800; letter-spacing: -1px;
+            line-height: 1.1; margin-bottom: 20px;
+            background: linear-gradient(to right, #fff, #8b949e);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+
+        p.subtitle {
+            font-size: 1.1rem; color: var(--text-muted); max-width: 500px;
+            margin-bottom: 60px; line-height: 1.6;
+        }
+
+        /* --- Theme Grid & Base Cards --- */
+        .theme-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px; width: 100%; max-width: 1000px;
+        }
+
+        .theme-card {
+            background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+            padding: 40px 30px; text-align: left; text-decoration: none; color: inherit;
+            position: relative; overflow: hidden; cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .theme-card h3 { font-size: 1.4rem; margin-bottom: 10px; color: #fff; position: relative; z-index: 2; }
+        .theme-card p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; position: relative; z-index: 2; }
+
+        /* Subtle indicator line */
+        .theme-card::before {
+            content: ''; position: absolute; top: 0; left: 0;
+            width: 4px; height: 100%; background: transparent;
+            transition: background 0.3s ease; z-index: 3;
+        }
+
+        /* --- Theme-Specific Hover Physics --- */
+
+        /* 1. Your Name hover physics */
+        .theme-card.yourname:hover {
+            transform: translateY(-8px);
+            border-color: rgba(225, 29, 72, 0.4); /* Red thread color */
+            box-shadow: 0 20px 40px -10px rgba(225, 29, 72, 0.15);
+            background: linear-gradient(to bottom right, #161b22, #1e1b4b); /* Shifts to night sky */
+            transition: all 1s cubic-bezier(0.2, 0.8, 0.2, 1); 
+        }
+        .theme-card.yourname:hover::before { background: #e11d48; }
+
+        /* HTTYD Hover Physics */
+        .theme-card.dragon:hover {
+            transform: translateY(-5px) scale(1.02);
+            border-color: #00e5ff; 
+            box-shadow: 0 15px 30px rgba(0, 229, 255, 0.2), inset 0 0 15px rgba(184, 41, 255, 0.2);
+            background: #0a0e17; /* Deep night sky */
+            transition: all 0.3s ease;
+        }
+        .theme-card.dragon h3 { font-family: 'Inter', sans-serif; text-transform: uppercase; letter-spacing: 2px; }
+        .theme-card.dragon:hover::before { background: #b829ff; }
+
+        .theme-card.spiderman:hover {
+            transform: skewY(-2deg) scale(1.05);
+            border-color: #ff2a2a;
+            box-shadow: 8px 8px 0px #00ffff;
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .theme-card.spiderman:hover::before { background: #ff2a2a; }
+
+        .theme-card.cyberpunk { clip-path: polygon(0 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%); }
+        .theme-card.cyberpunk:hover {
+            transform: translateX(5px) skewX(-2deg);
+            border-color: #fce000;
+            box-shadow: -5px 5px 0px #00f0ff, 5px -5px 0px #ff003c;
+            background: #050505;
+            transition: all 0.1s steps(3);
+        }
+        .theme-card.cyberpunk:hover::before { background: #fce000; }
+
+        /* Rick and Morty: Toxic cartoon wobble */
+        .theme-card.rick { 
+            border-width: 2px; 
+        }
+        .theme-card.rick:hover {
+            transform: rotate(2deg) scale(1.05);
+            border: 4px solid #97ce4c;
+            box-shadow: 6px 6px 0px #02b033;
+            background: #0f141e;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        .theme-card.rick h3 { font-family: 'Space Mono', monospace; font-weight: bold; }
+        .theme-card.rick:hover::before { background: transparent; }
+
+        /* Avengers hover physics */
+        .theme-card.avengers:hover {
+            transform: translateY(-5px);
+            border-color: #00e5ff; /* HUD Cyan */
+            box-shadow: 0 10px 30px rgba(0, 229, 255, 0.1), inset 0 0 15px rgba(0, 229, 255, 0.05);
+            background: #020617;
+            transition: all 0.3s ease;
+        }
+        .theme-card.avengers h3 { font-family: 'Inter', sans-serif; letter-spacing: 2px; text-transform: uppercase;}
+        .theme-card.avengers:hover::before { background: #00e5ff; }
+
+        /* --- The Portal Transition Overlay --- */
+        #portal {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            pointer-events: none; z-index: 999;
+            opacity: 0; transition: opacity 0.5s ease;
+        }
+        
+        body.transitioning-yourname #portal { background: linear-gradient(135deg, #1e1b4b, #fb923c); opacity: 1; transition: opacity 1.2s ease-in-out; }
+        body.transitioning-spiderman #portal { background: repeating-radial-gradient(#0b1426, #0b1426 10px, #ff2a2a 10px, #ff2a2a 20px); opacity: 1; transition: opacity 0.4s ease; }
+        body.transitioning-cyberpunk #portal { background: #fce000; opacity: 1; mix-blend-mode: difference; transition: opacity 0.2s cubic-bezier(1, 0, 0, 1); }
+        body.transitioning-rick #portal { background: radial-gradient(circle, #97ce4c 0%, #02b033 50%, #000 100%); opacity: 1; border-radius: 50%; transform: scale(3); transition: all 0.6s cubic-bezier(0.5, 0, 0.2, 1); filter: blur(10px);}
+        body.transitioning-dragon #portal { background: #ffffff; box-shadow: inset 0 0 100px #b829ff; opacity: 1; transition: opacity 0.5s ease-in}
+        body.transitioning-avengers #portal { 
+            background: #ffffff; 
+            box-shadow: inset 0 0 100px #00e5ff;
+            opacity: 1; 
+            clip-path: circle(0% at 50% 50%);
+            transition: clip-path 0.5s cubic-bezier(0.8, 0, 0.2, 1);
+        }
+        body.transitioning-avengers #portal { clip-path: circle(150% at 50% 50%); }
+
+    </style>
+</head>
+<body>
+
+    <nav class="animate-down">
+        <a href="#" class="logo">R I</a>
+    </nav>
+
+    <main>
+        <h1 class="animate-up delay-1">Pick Your Desired Themed Site</h1>
+        <p class="subtitle animate-up delay-2">Pick a Card, Any Card.</p>
+
+        <div class="theme-grid">
+            <a href="YourName.html" class="theme-card yourname animate-up delay-3" data-theme="yourname">
+                <h3>The Twilight</h3>
+                <p>A fluid, physics-based Red Thread of fate, atmospheric sky gradients, and falling comets.</p>
+            </a>
+
+            <a href="Dragon.html" class="theme-card dragon animate-up delay-7" data-theme="dragon">
+                <h3>The Hidden World</h3>
+                <p>High-altitude cloud parallax, a cursor-tracking Night Fury, and explosive plasma blast clicks.</p>
+            </a>
+
+            <a href="Spiderman.html" class="theme-card spiderman animate-up delay-6" data-theme="spiderman">
+                <h3>Into the Spider-Verse</h3>
+                <p>Comic-panel layouts, chromatic aberration, and an interactive web-shooter physics mechanic.</p>
+            </a>
+
+            <a href="Cyberpunk.html" class="theme-card cyberpunk animate-up delay-7" data-theme="cyberpunk">
+                <h3>Night City</h3>
+                <p>Neon grids, severe chromatic aberration, and a physics-altering Sandevistan mechanic.</p>
+            </a>
+
+            <a href="RickAndMorty.html" class="theme-card rick animate-up delay-7" data-theme="rick">
+                <h3>Dimension C-137</h3>
+                <p>Toxic green portals, cartoon layouts, and interactive Meeseeks box spawns.</p>
+            </a>
+
+            <a href="Avengers.html" class="theme-card avengers animate-up delay-7" data-theme="avengers">
+                <h3>The Initiative</h3>
+                <p>A tactical S.H.I.E.L.D. database featuring dynamic 3D-tilt roster cards and kinetic repulsor clicks.</p>
+            </a>
+
+        </div>
+    </main>
+
+    <!-- Overlay for page transitions -->
+    <div id="portal"></div>
+
+    <script>
+        // --- Portal Transition Logic ---
+        document.querySelectorAll('.theme-card').forEach(card => {
+            card.addEventListener('click', function(e) {
+                e.preventDefault(); 
+                
+                const theme = this.getAttribute('data-theme');
+                const targetUrl = this.getAttribute('href'); 
+
+                document.body.classList.add(`transitioning-${theme}`);
+                
+                let delay = 1500; 
+                if(theme === 'yourname') delay = 1200; // Smooth, emotional fade
+                if(theme === 'dragon') delay = 500;
+                if(theme === 'spiderman') delay = 400;
+                if(theme === 'cyberpunk') delay = 200;
+                if(theme === 'rick') delay = 600; // Time for the portal to expand
+                if(theme === 'avengers') delay = 500;
+
+                setTimeout(() => {
+                    window.location.href = targetUrl; 
+                }, delay);
+            });
+        });
+    </script>
+</body>
+</html>

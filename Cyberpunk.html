@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Night City // Built Different</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cp-yellow: #fce000;
+            --cp-cyan: #00f0ff;
+            --cp-pink: #ff003c;
+            --cp-dark: #050505;
+            --cp-gray: #1a1a1a;
+            --text-main: #e0e0e0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: crosshair; }
+
+        body {
+            background-color: var(--cp-dark);
+            color: var(--text-main);
+            font-family: 'Rajdhani', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* --- Global Overlays --- */
+        .scanlines {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.2));
+            background-size: 100% 4px;
+            z-index: 100; pointer-events: none; opacity: 0.6;
+        }
+
+        .grid-bg {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background-image: linear-gradient(var(--cp-cyan) 1px, transparent 1px), linear-gradient(90deg, var(--cp-cyan) 1px, transparent 1px);
+            background-size: 50px 50px;
+            opacity: 0.03;
+            transform: perspective(500px) rotateX(60deg) translateY(-100px) translateZ(-200px);
+            animation: gridMove 20s linear infinite;
+            z-index: 0;
+        }
+
+        @keyframes gridMove { 0% { background-position: 0 0; } 100% { background-position: 0 50px; } }
+
+        /* --- Typography & Glitch Effects --- */
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(3rem, 10vw, 8rem);
+            line-height: 1;
+            text-transform: uppercase;
+            color: var(--cp-yellow);
+            text-shadow: 4px 4px 0px var(--cp-pink);
+            position: relative;
+            z-index: 10;
+            margin-bottom: 30px; /* Added proper spacing below header */
+        }
+
+        .glitch {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .glitch::before, .glitch::after {
+            content: attr(data-text);
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--cp-dark);
+        }
+        
+        .glitch::before {
+            left: 3px; text-shadow: -2px 0 var(--cp-pink);
+            clip-path: inset(10% 0 80% 0);
+            animation: glitch-anim 2s infinite linear alternate-reverse;
+        }
+        
+        .glitch::after {
+            left: -3px; text-shadow: -2px 0 var(--cp-cyan);
+            clip-path: inset(80% 0 10% 0);
+            animation: glitch-anim-2 3s infinite linear alternate-reverse;
+        }
+
+        @keyframes glitch-anim {
+            0% { clip-path: inset(20% 0 80% 0); }
+            20% { clip-path: inset(60% 0 10% 0); }
+            40% { clip-path: inset(40% 0 50% 0); }
+            60% { clip-path: inset(80% 0 5% 0); }
+            80% { clip-path: inset(10% 0 70% 0); }
+            100% { clip-path: inset(30% 0 50% 0); }
+        }
+        @keyframes glitch-anim-2 {
+            0% { clip-path: inset(10% 0 60% 0); }
+            20% { clip-path: inset(30% 0 20% 0); }
+            40% { clip-path: inset(70% 0 10% 0); }
+            60% { clip-path: inset(20% 0 50% 0); }
+            80% { clip-path: inset(90% 0 5% 0); }
+            100% { clip-path: inset(50% 0 30% 0); }
+        }
+
+        /* --- Sections --- */
+        section {
+            min-height: 100vh;
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center;
+            align-items: flex-start; /* Forces left alignment for the whole block */
+            padding: 10vw; 
+            position: relative; 
+            z-index: 10;
+        }
+
+        .ui-box {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 24px; /* Perfectly spaces the paragraph and button */
+            border: 2px solid var(--cp-cyan);
+            background: rgba(0, 240, 255, 0.05);
+            padding: 40px 40px 40px 30px; /* Increased padding to prevent edge clipping */
+            backdrop-filter: blur(5px);
+            position: relative;
+            max-width: 600px;
+            clip-path: polygon(0 0, 100% 0, 100% calc(100% - 30px), calc(100% - 30px) 100%, 0 100%);
+        }
+
+        .ui-box::before {
+            content: 'SYS.REQ // CHROME';
+            position: absolute; top: -14px; left: 20px;
+            background: var(--cp-cyan); color: var(--cp-dark);
+            font-size: 0.85rem; padding: 4px 12px; font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        p { 
+            font-size: 1.5rem; 
+            line-height: 1.5; 
+            font-weight: 500; 
+        }
+
+        /* --- The Sandevistan Button --- */
+        .cyber-btn {
+            background: var(--cp-yellow);
+            color: var(--cp-dark);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem; 
+            font-weight: 900;
+            border: none; 
+            padding: 16px 32px; 
+            text-transform: uppercase; 
+            letter-spacing: 2px;
+            clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px);
+            transition: all 0.2s ease;
+            position: relative;
+            display: inline-block;
+        }
+
+        .cyber-btn:hover {
+            background: var(--cp-pink); color: white;
+            box-shadow: 0 0 20px var(--cp-pink);
+            transform: translateX(5px);
+        }
+
+        /* --- Fast Moving Data Streams (Background) --- */
+        .data-stream {
+            position: fixed; width: 2px; background: var(--cp-cyan);
+            z-index: 1; opacity: 0.5;
+            animation: streamFall linear infinite;
+        }
+        @keyframes streamFall { 0% { transform: translateY(-100vh); } 100% { transform: translateY(100vh); } }
+
+        /* =========================================
+           SANDEVISTAN ACTIVE STATE (THE PHYSICS)
+           ========================================= */
+        body.sandy-active {
+            animation: sandyShockwave 0.3s ease-out forwards;
+        }
+
+        body.sandy-active .grid-bg {
+            animation-duration: 200s; /* Slows down background grid heavily */
+            border-top: 5px solid var(--cp-yellow);
+            border-bottom: 5px solid var(--cp-cyan);
+        }
+
+        body.sandy-active .data-stream {
+            animation-play-state: paused; /* Freezes data streams */
+            box-shadow: 0 0 10px var(--cp-pink);
+            background: var(--cp-pink);
+        }
+
+        body.sandy-active h1 {
+            color: var(--cp-cyan);
+            text-shadow: 5px 0px 0px var(--cp-pink), -5px 0px 0px var(--cp-yellow);
+        }
+
+        /* Mouse Trail Effect */
+        .trail {
+            position: fixed; width: 20px; height: 20px;
+            border: 2px solid var(--cp-yellow);
+            border-radius: 50%;
+            pointer-events: none; z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: opacity 0.5s, transform 0.5s;
+        }
+
+        @keyframes sandyShockwave {
+            0% { filter: invert(1) hue-rotate(90deg); transform: scale(1.05); }
+            100% { filter: invert(0) hue-rotate(0deg); transform: scale(1); }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="scanlines"></div>
+    <div class="grid-bg"></div>
+
+    <main>
+        <section id="hero">
+            <h1 class="glitch" data-text="EDGERUNNER">EDGERUNNER</h1>
+            <div class="ui-box">
+                <p>I'm built different. A construct of chrome, code, and sheer will.</p>
+                <button class="cyber-btn" id="sandy-trigger">ACTIVATE SANDEVISTAN</button>
+            </div>
+        </section>
+
+        <section id="net">
+            <h1 style="color: var(--cp-pink); text-shadow: 4px 4px 0 var(--cp-cyan);">THE DEEP DIVE</h1>
+            <div class="ui-box" style="border-color: var(--cp-pink);">
+                <p>Watch your ICE. The Net doesn't forgive, and neither does Arasaka.</p>
+                <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="cyber-btn" style="background: transparent; color: var(--cp-pink); border: 2px solid var(--cp-pink);">JACK OUT</button>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // 1. Generate Fast Data Streams
+        function createDataStreams() {
+            for(let i=0; i<20; i++) {
+                let stream = document.createElement('div');
+                stream.classList.add('data-stream');
+                stream.style.left = Math.random() * 100 + 'vw';
+                stream.style.height = (Math.random() * 100 + 50) + 'px';
+                stream.style.animationDuration = (Math.random() * 0.5 + 0.2) + 's'; // Very fast initially
+                document.body.appendChild(stream);
+            }
+        }
+        createDataStreams();
+
+        // 2. Sandevistan Mechanics
+        const sandyBtn = document.getElementById('sandy-trigger');
+        let isSandyActive = false;
+        let trailInterval;
+
+        sandyBtn.addEventListener('click', () => {
+            isSandyActive = !isSandyActive;
+            
+            if(isSandyActive) {
+                document.body.classList.add('sandy-active');
+                sandyBtn.innerText = "DEACTIVATE";
+                sandyBtn.style.background = "var(--cp-pink)";
+                sandyBtn.style.color = "white";
+                
+                // Start Mouse Trail
+                window.addEventListener('mousemove', drawTrail);
+            } else {
+                document.body.classList.remove('sandy-active');
+                sandyBtn.innerText = "ACTIVATE SANDEVISTAN";
+                sandyBtn.style.background = "var(--cp-yellow)";
+                sandyBtn.style.color = "var(--cp-dark)";
+                
+                // Stop Mouse Trail
+                window.removeEventListener('mousemove', drawTrail);
+            }
+        });
+
+        // 3. Mouse After-Image Trail (Only when Sandevistan is active)
+        function drawTrail(e) {
+            const trail = document.createElement('div');
+            trail.classList.add('trail');
+            trail.style.left = e.clientX + 'px';
+            trail.style.top = e.clientY + 'px';
+            
+            // Randomize trail colors between Neon Yellow, Cyan, and Pink
+            const colors = ['#fce000', '#00f0ff', '#ff003c'];
+            trail.style.borderColor = colors[Math.floor(Math.random() * colors.length)];
+            
+            document.body.appendChild(trail);
+
+            // Fade and expand out
+            setTimeout(() => {
+                trail.style.opacity = '0';
+                trail.style.transform = 'translate(-50%, -50%) scale(3)';
+            }, 50);
+
+            // Cleanup DOM
+            setTimeout(() => {
+                trail.remove();
+            }, 550);
+        }
+    </script>
+</body>
+</html>
